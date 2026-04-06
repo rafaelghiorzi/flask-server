@@ -1,0 +1,23 @@
+name: Build and Push Docker Image
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Login no GHCR
+        run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build da imagem
+        run: |
+          docker build -t ghcr.io/rafaelghiorzi/flask-app:latest .
+
+      - name: Push da imagem
+        run: |
+          docker push ghcr.io/rafaelghiorzi/flask-app:latest
